@@ -114,7 +114,7 @@ ros2 run rviz2 rviz2
 
 ```bash
 # 1. Launch SLAM
-ros2 launch trash_bot slam_launch.py
+
 
 # 2. In another terminal, teleoperate the robot
 ros2 run teleop_twist_keyboard teleop_twist_keyboard

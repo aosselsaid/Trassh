@@ -5,7 +5,7 @@ Use this to create the map during Phase 1.
 """
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -71,6 +71,8 @@ def generate_launch_description():
     )
     
     # Lidar Node (RPLidar)
+    # Note: If Lidar stops when RViz starts, it might be a USB bandwidth/power issue.
+    # Try changing the serial port if needed (e.g. /dev/ttyUSB0 vs /dev/ttyUSB1)
     lidar_node = Node(
         package='sllidar_ros2',
         executable='sllidar_node',
@@ -80,7 +82,9 @@ def generate_launch_description():
             'serial_baudrate': 115200,
             'frame_id': 'laser_frame',
             'inverted': False,
-            'angle_compensate': True
+            'angle_compensate': True,
+            'scan_mode': 'Standard',
+            'channel_type': 'serial'
         }],
         output='screen'
     )
@@ -107,6 +111,12 @@ def generate_launch_description():
         output='screen',
         condition=IfCondition(use_rviz)
     )
+
+    # Delay RViz to ensure Lidar and SLAM are ready
+    delayed_rviz_node = TimerAction(
+        period=5.0,
+        actions=[rviz_node]
+    )
     
     # Create the launch description
     ld = LaunchDescription()
@@ -121,6 +131,6 @@ def generate_launch_description():
     ld.add_action(serial_bridge_node)
     ld.add_action(lidar_node)
     ld.add_action(slam_toolbox_cmd)
-    ld.add_action(rviz_node)
+    ld.add_action(delayed_rviz_node)
     
     return ld
