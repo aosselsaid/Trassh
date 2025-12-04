@@ -16,9 +16,9 @@ ament_python_install_package(${PROJECT_NAME})
 
 # Install Python scripts
 install(PROGRAMS
-  scripts/gesture_control.py
-  scripts/mission_controller.py
-  scripts/serial_bridge.py
+  trash_bot/gesture_control.py
+  trash_bot/mission_controller.py
+  trash_bot/serial_bridge.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
