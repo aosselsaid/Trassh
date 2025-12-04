@@ -18,8 +18,8 @@ def generate_launch_description():
     # Get package share directory
     pkg_share = FindPackageShare('trash_bot')
     
-    # Path to SDF file
-    sdf_file = PathJoinSubstitution([pkg_share, 'urdf', 'trash_bot.sdf'])
+    # Path to URDF file
+    urdf_file = PathJoinSubstitution([pkg_share, 'urdf', 'trash_bot.urdf.xacro'])
     
     # Launch configuration
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -31,16 +31,6 @@ def generate_launch_description():
     )
     
     # Robot State Publisher
-    # Note: robot_state_publisher typically expects URDF. 
-    # If using SDF, we might need to convert it or use a tool that supports SDF.
-    # However, for Gazebo simulation, SDF is native.
-    # For ROS 2 tools (RViz, Nav2), URDF is still the standard.
-    # If you strictly want to use SDF for everything, you might face compatibility issues with standard ROS tools.
-    # But assuming you want to use SDF for Gazebo and keep URDF for ROS tools, or try to load SDF content:
-    
-    with open(os.path.join(get_package_share_directory('trash_bot'), 'urdf', 'trash_bot.sdf'), 'r') as infp:
-        robot_desc = infp.read()
-
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -48,7 +38,10 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'use_sim_time': use_sim_time,
-            'robot_description': robot_desc
+            'robot_description': ParameterValue(
+                Command(['xacro ', urdf_file]),
+                value_type=str
+            )
         }]
     )
     
