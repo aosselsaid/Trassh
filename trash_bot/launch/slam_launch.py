@@ -70,6 +70,21 @@ def generate_launch_description():
         }]
     )
     
+    # Lidar Node (RPLidar)
+    lidar_node = Node(
+        package='sllidar_ros2',
+        executable='sllidar_node',
+        name='sllidar_node',
+        parameters=[{
+            'serial_port': '/dev/ttyUSB1',
+            'serial_baudrate': 115200,
+            'frame_id': 'laser_frame',
+            'inverted': False,
+            'angle_compensate': True
+        }],
+        output='screen'
+    )
+    
     # SLAM Toolbox (Online Async)
     slam_toolbox_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -104,6 +119,7 @@ def generate_launch_description():
     # Add nodes
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(serial_bridge_node)
+    ld.add_action(lidar_node)
     ld.add_action(slam_toolbox_cmd)
     ld.add_action(rviz_node)
     
