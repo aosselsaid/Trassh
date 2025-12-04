@@ -14,13 +14,10 @@ find_package(rclpy REQUIRED)
 # Install Python modules
 ament_python_install_package(${PROJECT_NAME})
 
-# Install Python scripts
-install(PROGRAMS
-  trash_bot/gesture_control.py
-  trash_bot/mission_controller.py
-  trash_bot/serial_bridge.py
-  DESTINATION lib/${PROJECT_NAME}
-)
+# Install Python scripts with proper names (stripping .py extension)
+install(PROGRAMS trash_bot/gesture_control.py DESTINATION lib/${PROJECT_NAME} RENAME gesture_control)
+install(PROGRAMS trash_bot/mission_controller.py DESTINATION lib/${PROJECT_NAME} RENAME mission_controller)
+install(PROGRAMS trash_bot/serial_bridge.py DESTINATION lib/${PROJECT_NAME} RENAME serial_bridge)
 
 # Install launch files
 install(DIRECTORY
