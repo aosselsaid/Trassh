@@ -26,9 +26,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'gesture_control = trash_bot.gesture_control:main',
-            'mission_controller = trash_bot.mission_controller:main',
-            'serial_bridge = trash_bot.serial_bridge:main',
+            'gesture_control = scripts.gesture_control:main',
+            'mission_controller = scripts.mission_controller:main',
+            'serial_bridge = scripts.serial_bridge:main',
         ],
     },
 )

@@ -243,9 +243,13 @@ void sendEncoderData() {
   message[0] = 0xFF;  // Start byte
   message[1] = 0x02;  // Message type: encoder data
   
+  // Copy volatile encoder ticks to non-volatile variables first
+  long left_ticks_copy = left_encoder_ticks;
+  long right_ticks_copy = right_encoder_ticks;
+  
   // Copy encoder ticks
-  memcpy(message + 2, &left_encoder_ticks, 4);
-  memcpy(message + 6, &right_encoder_ticks, 4);
+  memcpy(message + 2, &left_ticks_copy, 4);
+  memcpy(message + 6, &right_ticks_copy, 4);
   
   // Calculate checksum
   byte checksum = 0;
