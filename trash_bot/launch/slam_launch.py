@@ -14,6 +14,8 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 
+from launch.conditions import IfCondition
+
 def generate_launch_description():
     # Get package directories
     pkg_trash_bot = get_package_share_directory('trash_bot')
@@ -21,12 +23,19 @@ def generate_launch_description():
     
     # Launch arguments
     use_sim_time = LaunchConfiguration('use_sim_time')
+    use_rviz = LaunchConfiguration('use_rviz')
     params_file = LaunchConfiguration('params_file')
     
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
         default_value='false',
         description='Use simulation (Gazebo) clock if true'
+    )
+
+    declare_use_rviz_cmd = DeclareLaunchArgument(
+        'use_rviz',
+        default_value='true',
+        description='Launch RViz'
     )
     
     declare_params_file_cmd = DeclareLaunchArgument(
@@ -80,7 +89,8 @@ def generate_launch_description():
         name='rviz2',
         arguments=['-d', rviz_config_file],
         parameters=[{'use_sim_time': use_sim_time}],
-        output='screen'
+        output='screen',
+        condition=IfCondition(use_rviz)
     )
     
     # Create the launch description
@@ -88,6 +98,7 @@ def generate_launch_description():
     
     # Add launch arguments
     ld.add_action(declare_use_sim_time_cmd)
+    ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_params_file_cmd)
     
     # Add nodes
