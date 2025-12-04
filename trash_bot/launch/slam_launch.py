@@ -82,11 +82,10 @@ def generate_launch_description():
             'serial_baudrate': 115200,
             'frame_id': 'laser_frame',
             'inverted': False,
-            'angle_compensate': True,
-            'scan_mode': 'Standard',
-            'channel_type': 'serial'
+            'angle_compensate': True
         }],
-        output='screen'
+        output='screen',
+        respawn=True
     )
     
     # SLAM Toolbox (Online Async)
