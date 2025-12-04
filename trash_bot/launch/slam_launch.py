@@ -85,7 +85,8 @@ def generate_launch_description():
             'angle_compensate': True
         }],
         output='screen',
-        respawn=True
+        respawn=True,
+        respawn_delay=2.0
     )
     
     # SLAM Toolbox (Online Async)
@@ -113,7 +114,7 @@ def generate_launch_description():
 
     # Delay RViz to ensure Lidar and SLAM are ready
     delayed_rviz_node = TimerAction(
-        period=5.0,
+        period=8.0,
         actions=[rviz_node]
     )
     
